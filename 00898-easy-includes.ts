@@ -1,9 +1,13 @@
 // ============= Test Cases =============
-import type { Equal, Expect } from './test-utils'
+import type { Equal, Expect } from './test-utils';
 
 type cases = [
-  Expect<Equal<Includes<['Kars', 'Esidisi', 'Wamuu', 'Santana'], 'Kars'>, true>>,
-  Expect<Equal<Includes<['Kars', 'Esidisi', 'Wamuu', 'Santana'], 'Dio'>, false>>,
+  Expect<
+    Equal<Includes<['Kars', 'Esidisi', 'Wamuu', 'Santana'], 'Kars'>, true>
+  >,
+  Expect<
+    Equal<Includes<['Kars', 'Esidisi', 'Wamuu', 'Santana'], 'Dio'>, false>
+  >,
   Expect<Equal<Includes<[1, 2, 3, 5, 6, 7], 7>, true>>,
   Expect<Equal<Includes<[1, 2, 3, 5, 6, 7], 4>, false>>,
   Expect<Equal<Includes<[1, 2, 3], 2>, true>>,
@@ -17,16 +21,15 @@ type cases = [
   Expect<Equal<Includes<[1], 1 | 2>, false>>,
   Expect<Equal<Includes<[1 | 2], 1>, false>>,
   Expect<Equal<Includes<[null], undefined>, false>>,
-  Expect<Equal<Includes<[undefined], null>, false>>,
-]
-
+  Expect<Equal<Includes<[undefined], null>, false>>
+];
 
 // ============= Your Code Here =============
-type Includes<T extends readonly any[], U> = {
-  [V in T[number]]: true
-}[U] extends true  ? true : false
-
-
-const  foo = [false, 2, 3, 5, 6, 7]
-
-const x : keyof typeof foo = ''
+type Includes<T extends readonly any[], U> = T extends [
+  infer V,
+  ...infer Rest
+]
+  ? Equal<V, U> extends true
+    ? true
+    : Includes<Rest, U>
+  : false;
