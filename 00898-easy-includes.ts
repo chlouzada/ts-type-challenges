@@ -22,4 +22,11 @@ type cases = [
 
 
 // ============= Your Code Here =============
-type Includes<T extends readonly any[], U> = U extends keyof T ? true : false
+type Includes<T extends readonly any[], U> = {
+  [V in T[number]]: true
+}[U] extends true  ? true : false
+
+
+const  foo = [false, 2, 3, 5, 6, 7]
+
+const x : keyof typeof foo = ''
