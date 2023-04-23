@@ -30,7 +30,7 @@ interface Expected {
 
 
 // ============= Your Code Here =============
-type MyReadonly2<TObject, TReadonly extends keyof TObject> = {
+type MyReadonly2<TObject, TReadonly extends keyof TObject = any> = {
  [TKey in keyof TObject as TKey extends TReadonly? never: TKey]: TObject[TKey]
 } & {
   readonly [ TKey in keyof TObject as TKey extends TReadonly ? TKey: never ]: TObject[TKey]
