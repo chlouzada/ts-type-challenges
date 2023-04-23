@@ -1,76 +1,78 @@
 // ============= Test Cases =============
-import type { Equal, Expect } from './test-utils'
+import type { Equal, Expect } from './test-utils';
 
 type cases = [
   Expect<Equal<DeepReadonly<X1>, Expected1>>,
-  Expect<Equal<DeepReadonly<X2>, Expected2>>,
-]
+  Expect<Equal<DeepReadonly<X2>, Expected2>>
+];
 
 type X1 = {
-  a: () => 22
-  b: string
+  a: () => 22;
+  b: string;
   c: {
-    d: boolean
+    d: boolean;
     e: {
       g: {
         h: {
-          i: true
-          j: 'string'
-        }
-        k: 'hello'
-      }
+          i: true;
+          j: 'string';
+        };
+        k: 'hello';
+      };
       l: [
         'hi',
         {
-          m: ['hey']
-        },
-      ]
-    }
-  }
-}
+          m: ['hey'];
+        }
+      ];
+    };
+  };
+};
 
-type X2 = { a: string } | { b: number }
+type X2 = { a: string } | { b: number };
 
 type Expected1 = {
-  readonly a: () => 22
-  readonly b: string
+  readonly a: () => 22;
+  readonly b: string;
   readonly c: {
-    readonly d: boolean
+    readonly d: boolean;
     readonly e: {
       readonly g: {
         readonly h: {
-          readonly i: true
-          readonly j: 'string'
-        }
-        readonly k: 'hello'
-      }
+          readonly i: true;
+          readonly j: 'string';
+        };
+        readonly k: 'hello';
+      };
       readonly l: readonly [
         'hi',
         {
-          readonly m: readonly ['hey']
-        },
-      ]
-    }
-  }
-}
+          readonly m: readonly ['hey'];
+        }
+      ];
+    };
+  };
+};
 
-type Expected2 = { readonly a: string } | { readonly b: number }
-
+type Expected2 = { readonly a: string } | { readonly b: number };
 
 // ============= Your Code Here =============
 type DeepReadonly<T> = {
-  readonly [K in keyof T]: T[K] extends object ? DeepReadonly<T[K]> : T[K]
-} 
+  readonly [K in keyof T]: T[K] extends string | number
+    ? T[K]
+    : T[K] extends (...args: any[]) => unknown ? T[K] : DeepReadonly<T[K]>;
+};
 
-type Foo = DeepReadonly<{a:1, b: {c: 1}}>
-//   ^? 
+type Foo = DeepReadonly<{ a: 1; b: { c: 1 }, d: () => 22 }>;
+//   ^?
 
 const foo: Foo = {
   a: 1,
   b: {
-    c:1
-  }
-}
+    c: 1,
+  },
+  d: () => 22,
+};
 
 // @ts-expect-error
-foo.b.c = 2
+foo.b.c = 2;
